@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:timer_progressbar_getx_sycn/controller/controller_test.dart';
 import 'package:timer_progressbar_getx_sycn/controller/controller_video_player.dart';
-import 'package:timer_progressbar_getx_sycn/widgets/round_button.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -25,8 +23,8 @@ class GetxSyncPlayer extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  VideoPlayer(Get.find<ControllerVideoPlayer>().controller),
-                  _ControlsOverlay(controller: Get.find<ControllerVideoPlayer>().controller),
+                  VideoPlayer(Get.find<ControllerVideoPlayer>().playerController),
+                  _ControlsOverlay(controller: Get.find<ControllerVideoPlayer>().playerController),
                   // VideoProgressIndicator(Get.find<ControllerVideoPlayer>().controller, allowScrubbing: true), // 하단 프로그래스바
                 ],
               ),
@@ -38,10 +36,7 @@ class GetxSyncPlayer extends StatelessWidget {
       ),
     );
 
-
   }
-
-
 
 }
 
