@@ -35,18 +35,6 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
                 ),
               ),
 
-              /// 프로그래스바
-              // Obx(() {
-              //   return Container(
-              //     width: double.infinity,
-              //     height: 100,
-              //     child: LinearProgressIndicator(
-              //       value: controller.progress.value,
-              //       color: Color(0x6607BEB8),
-              //       backgroundColor: Colors.transparent,
-              //     ),
-              //   );
-              // }),
 
               Obx(() {
                 return Column(
@@ -134,19 +122,37 @@ class _ControlsOverlay extends StatelessWidget {
           padding: const EdgeInsets.only(right: 10),
           child: Align(
             alignment: Alignment.topRight,
-            child: IconButton(
-              onPressed: () {
-                // playerController.value.isPlaying ? controller.pause() : controller.play();
+            child:
 
-                GetxController.SetPlayerState();
-              },
-              icon: const Icon(
-                Icons.pause,
-                color: Colors.white,
-                size: 40.0,
-                semanticLabel: 'Play',
-              ),
-            ),
+            Obx(() {
+              return
+                IconButton(
+                  onPressed: () {
+                    // playerController.value.isPlaying ? controller.pause() : controller.play();
+                    GetxController.SetPlayerState();
+                  },
+                  icon: Icon(
+                    GetxController.isTimerPlaying.value == true ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 40.0,
+                    semanticLabel: 'Play',
+                  ),
+                );
+            }),
+
+            // IconButton(
+            //   onPressed: () {
+            //     // playerController.value.isPlaying ? controller.pause() : controller.play();
+            //     GetxController.SetPlayerState();
+            //   },
+            //   icon: const Icon(
+            //     Icons.pause,
+            //     color: Colors.white,
+            //     size: 40.0,
+            //     semanticLabel: 'Play',
+            //   ),
+            // ),
+
           ),
         ),
       ],

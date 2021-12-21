@@ -90,7 +90,7 @@ class GetxCountdownPage extends GetView<ControllerTestPlayVideo> {
                   },
                   child: Obx(() {
                     return RoundButton(
-                        icon: controller.isPlaying.value == true ? Icons.pause : Icons.play_arrow,
+                        icon: controller.isTimerPlaying.value == true ? Icons.pause : Icons.play_arrow,
                       );
                   }),
                 ),

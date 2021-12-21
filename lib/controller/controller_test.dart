@@ -17,7 +17,7 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
   }
 
   RxDouble progress = 0.0.obs;
-  RxBool isPlaying = false.obs; // 재생 여부
+  RxBool isTimerPlaying = false.obs; // 재생 여부
 
 
   /// 끝나는 타이밍에 소리내는 알람을 울린다.
@@ -28,8 +28,8 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
   }
 
   // 값 변경은 컨트롤러에 요청하거나, 파라미터로 값을 넘기고 컨트롤러에서 변경한다.
-  void playTimer() => isPlaying.value = true;
-  void stopTimer() => isPlaying.value = false;
+  void playTimer() => isTimerPlaying.value = true;
+  void stopTimer() => isTimerPlaying.value = false;
 
 
 
@@ -56,7 +56,7 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
       }
       /// 타이머 종료
       else {
-        isPlaying.value = false;  // 플레잉 중지
+        isTimerPlaying.value = false;  // 플레잉 중지
         progress.value = 0.0;     // 100% 다 채워지게 한다.
       }
     });
