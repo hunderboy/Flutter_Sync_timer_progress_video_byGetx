@@ -10,6 +10,7 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(ControllerVideoPlayer());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,7 +27,8 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
                     alignment: Alignment.bottomCenter,
                     children: <Widget>[
                       VideoPlayer(controller.playerController),
-                      _ControlsOverlay(controller: controller.playerController),
+                      _ControlsOverlay(GetxController: controller),
+                      // _ControlsOverlay(controller: controller.playerController),
                       // VideoProgressIndicator(controller.playerController, allowScrubbing: true), // 하단 프로그래스바
                     ],
                   ),
@@ -46,6 +48,65 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
               //   );
               // }),
 
+              Obx(() {
+                return Column(
+                  children: <Widget>[
+                    Stack(
+                        children: <Widget>[
+                          Container(
+                            width: double.infinity,
+                            height: 100,
+                            child: LinearProgressIndicator(
+                              value: controller.progress.value,
+                              color: Color(0x6607BEB8),
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),  // 운동 progress
+                          Container(
+                            width: double.infinity,
+                            height: 100,
+                            child: LinearProgressIndicator(
+                              value: 0.00,
+                              color: Color(0x66c8c8c8),
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),  // 준비 progress
+                          Container(
+                            padding: const EdgeInsets.only(left: 20),
+                            height: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child:
+                                  Text("${controller.countText.value}", style: TextStyle(fontSize: 18)),  // 운동 타이머
+                                  // Text("00:00", style: TextStyle(fontSize: 18)),  // 운동 타이머
+                                ),  // 메인 이미지 운동 제목
+                                Container(
+                                  margin: EdgeInsets.only(left: 20),
+                                  child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Text("운동 타이틀", style: TextStyle(fontSize: 15)), // 운동 제목
+                                        ),  // 메인 이미지 운동 제목
+                                        // Container(
+                                        //   child: Text("오른발", style: TextStyle(fontSize: 12)), // 운동 서브 타이틀
+                                        // ),  // 메인 이미지 운동 시간
+                                      ]
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]
+                    ),
+                    const Divider(color: Colors.black38, height: 1,),
+                  ],
+                );
+              }),
 
 
             ]
@@ -60,9 +121,10 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
 
 /// 비디오플레이어 컨트롤러
 class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({Key? key, required this.controller}) : super(key: key);
+  const _ControlsOverlay({Key? key, required this.GetxController}) : super(key: key);
 
-  final VideoPlayerController controller;
+  // final VideoPlayerController playerController;
+  final ControllerVideoPlayer GetxController;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +136,9 @@ class _ControlsOverlay extends StatelessWidget {
             alignment: Alignment.topRight,
             child: IconButton(
               onPressed: () {
-                controller.value.isPlaying ? controller.pause() : controller.play();
+                // playerController.value.isPlaying ? controller.pause() : controller.play();
+
+                GetxController.SetPlayerState();
               },
               icon: const Icon(
                 Icons.pause,

@@ -27,6 +27,13 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
     }
   }
 
+  // 값 변경은 컨트롤러에 요청하거나, 파라미터로 값을 넘기고 컨트롤러에서 변경한다.
+  void playTimer() => isPlaying.value = true;
+  void stopTimer() => isPlaying.value = false;
+
+
+
+
 
   @override
   void onInit() { // initState
@@ -62,7 +69,5 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
     super.dispose();
   }
 
-  void playTimer() => isPlaying.value = true;
-  void stopTimer() => isPlaying.value = false;
 
 }
