@@ -5,34 +5,51 @@ import 'package:video_player/video_player.dart';
 
 
 
-class GetxSyncPlayer extends StatelessWidget {
+class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
   const GetxSyncPlayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ControllerVideoPlayer());
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-          Container(
-            child: AspectRatio(
-              aspectRatio: 16 / 9, // 영상 비율에 맞춤 : Get.find<ControllerVideoPlayer>().controller.value.aspectRatio
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  VideoPlayer(Get.find<ControllerVideoPlayer>().playerController),
-                  _ControlsOverlay(controller: Get.find<ControllerVideoPlayer>().playerController),
-                  // VideoProgressIndicator(Get.find<ControllerVideoPlayer>().controller, allowScrubbing: true), // 하단 프로그래스바
-                ],
+              /// 비디오 플레이어
+              Container(
+                child: AspectRatio(
+                  aspectRatio: 16 / 9, // 영상 비율에 맞춤 : controller.playerController.value.aspectRatio
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      VideoPlayer(controller.playerController),
+                      _ControlsOverlay(controller: controller.playerController),
+                      // VideoProgressIndicator(controller.playerController, allowScrubbing: true), // 하단 프로그래스바
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
+
+              /// 프로그래스바
+              // Obx(() {
+              //   return Container(
+              //     width: double.infinity,
+              //     height: 100,
+              //     child: LinearProgressIndicator(
+              //       value: controller.progress.value,
+              //       color: Color(0x6607BEB8),
+              //       backgroundColor: Colors.transparent,
+              //     ),
+              //   );
+              // }),
 
 
-        ]),
+
+            ]
+        ),
       ),
     );
 
@@ -41,7 +58,7 @@ class GetxSyncPlayer extends StatelessWidget {
 }
 
 
-/// 비디오 컨트롤러
+/// 비디오플레이어 컨트롤러
 class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({Key? key, required this.controller}) : super(key: key);
 
