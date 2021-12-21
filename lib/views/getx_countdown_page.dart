@@ -78,12 +78,12 @@ class GetxCountdownPage extends GetView<ControllerTestPlayVideo> {
                       controller.animation_controller.stop();
                       controller.stopTimer();
                     } else {
-                      /// 거꾸로
-                      // controller.animation_controller.reverse(
-                      //     from: controller.animation_controller.value == 0 ? 1.0 : controller.animation_controller.value);
-                      /// 정방향
-                      controller.animation_controller.forward(
-                          from: controller.animation_controller.value == 0 ? 0.0 : controller.animation_controller.value);
+                      /// 프로그래스바 역방향 진행
+                      controller.animation_controller.reverse(
+                          from: controller.animation_controller.value == 0 ? 1.0 : controller.animation_controller.value);
+                      /// 프로그래스바 정방향 진행
+                      // controller.animation_controller.forward(
+                      //     from: controller.animation_controller.value == 0 ? 0.0 : controller.animation_controller.value);
 
                       controller.playTimer();
                     }

@@ -56,10 +56,10 @@ class ControllerVideoPlayer extends GetxController with SingleGetTickerProviderM
 
       /// 타이머 진행중
       if (animation_controller.isAnimating) {
-        /// 꺼꾸로 value = (1.0 -> 0.0)
-        // progress.value = (-(animation_controller.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
+        /// 역방향 value = (1.0 -> 0.0)
+        progress.value = (-(animation_controller.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
         /// 정방향 value = (0.0 -> 1.0)
-        progress.value = animation_controller.value; /// 프로그래스 바에 연결된 value 변경 실행
+        // progress.value = animation_controller.value; /// 프로그래스 바에 연결된 value 변경 실행
       }
       /// 타이머 종료
       else {
@@ -97,9 +97,9 @@ class ControllerVideoPlayer extends GetxController with SingleGetTickerProviderM
     } else {
       // 만약 영상이 일시 중지 상태였다면, 재생합니다.
       playerController.play();  // 재생
-      /// 정방향
-      animation_controller.forward(
-          from: animation_controller.value == 0 ? 0.0 : animation_controller.value);
+      /// 프로그래스바 역방향 진행
+      animation_controller.reverse(
+          from: animation_controller.value == 0 ? 1.0 : animation_controller.value);
 
     }
   }

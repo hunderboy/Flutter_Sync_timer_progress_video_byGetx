@@ -50,9 +50,9 @@ class ControllerTestPlayVideo extends GetxController with SingleGetTickerProvide
       /// 타이머 진행중
       if (animation_controller.isAnimating) {
         /// 꺼꾸로 value = (1.0 -> 0.0)
-        // progress.value = (-(animation_controller.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
+        progress.value = (-(animation_controller.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
         /// 정방향 value = (0.0 -> 1.0)
-        progress.value = animation_controller.value; /// 프로그래스 바에 연결된 value 변경 실행
+        // progress.value = animation_controller.value; /// 프로그래스 바에 연결된 value 변경 실행
       }
       /// 타이머 종료
       else {
