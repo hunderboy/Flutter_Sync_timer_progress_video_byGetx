@@ -35,7 +35,7 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
                 ),
               ),
 
-
+              /// 프로그래스바
               Obx(() {
                 return Column(
                   children: <Widget>[
@@ -69,7 +69,6 @@ class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
                                 Container(
                                   child:
                                   Text("${controller.countText.value}", style: TextStyle(fontSize: 18)),  // 운동 타이머
-                                  // Text("00:00", style: TextStyle(fontSize: 18)),  // 운동 타이머
                                 ),  // 메인 이미지 운동 제목
                                 Container(
                                   margin: EdgeInsets.only(left: 20),
@@ -139,19 +138,6 @@ class _ControlsOverlay extends StatelessWidget {
                   ),
                 );
             }),
-
-            // IconButton(
-            //   onPressed: () {
-            //     // playerController.value.isPlaying ? controller.pause() : controller.play();
-            //     GetxController.SetPlayerState();
-            //   },
-            //   icon: const Icon(
-            //     Icons.pause,
-            //     color: Colors.white,
-            //     size: 40.0,
-            //     semanticLabel: 'Play',
-            //   ),
-            // ),
 
           ),
         ),

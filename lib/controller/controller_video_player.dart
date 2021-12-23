@@ -27,16 +27,17 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
 
   // 끝나는 타이밍에 소리내는 알람을 울린다.
   void notify() {
-    if (countText == "00:00") {
       print("countText == 00:00");
       FlutterRingtonePlayer.playNotification(); // '띵' 하는 소리 울림
-
-    }
+      isTimerPlaying.value = false;  // 플레잉 중지
+      progress.value = 0.0;     // 100% 다 채워지게 한다.
+      playerController.pause();
   }
 
 
 
 
+  bool progressbarSwich = false;
 
 
   @override
@@ -45,35 +46,30 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
     /// 애니메이션 컨트롤러 초기화
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 10), // 초기 60초 설정
+      duration: Duration(seconds: 20), // 초기 60초 설정
     );
 
-    
+
     animationController.addListener(() {
-      notify(); /// 타이머 끝나면 알림 발생
-
-
-      /// 타이머 진행중
       if (animationController.isAnimating) {
         /// 역방향 value = (1.0 -> 0.0)
-        progress.value = (-(animationController.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
+        // progress.value = (-(animationController.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
+        progress.value = 1-animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
         /// 정방향 value = (0.0 -> 1.0)
         // progress.value = animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
       }
-      /// 타이머 종료
-      else {
-        // 타이머 시작하면 무조건 1번은 거친다. (거치면안되는데.. 그래서)
-        print("타이머 종료코드 통과");
-        print("${progress.value}"); // 무조건 1번 거칠때 progress.value = 0.0 이다.
+      // else{
+      //   // 스위치 on off
+      //   if(progressbarSwich){ // true 이면
+      //     progressbarSwich = false;
+      //     notify();
+      //   } else {
+      //     progressbarSwich = true;
+      //   }
+      // }
 
-        /// 그래서 progress.value = 0.0 이 아닐 경우에만 아래 코드가 실행되도록 한다.
-        if (progress.value == 1.0){
-          print("progress 1.0");
-          // isTimerPlaying.value = false;  // 플레잉 중지
-          // progress.value = 0.0;     // 100% 다 채워지게 한다.
-          // playerController.pause();
-        }
-      }
+      print(animationController.status.toString());
+
     });
 
 
@@ -98,14 +94,14 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
   }
 
   void SetPlayerState() {
-    if (playerController.value.isPlaying) {
+    if (playerController.value.isPlaying) { // 플레이어가 플레이 중인가?
+      isTimerPlaying.value = false;
       playerController.pause(); // 일시정지
       animationController.stop();
-      isTimerPlaying.value = false;
     } else {
       // 만약 영상이 일시 중지 상태였다면, 재생합니다.
-      playerController.play();  // 재생
       isTimerPlaying.value = true;
+      playerController.play();  // 재생
       /// 프로그래스바 역방향 진행
       animationController.reverse(
           from: animationController.value == 0 ? 1.0 : animationController.value);
