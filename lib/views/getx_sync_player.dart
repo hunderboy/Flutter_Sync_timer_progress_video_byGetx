@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:timer_progressbar_getx_sycn/controller/controller_use_video_progress.dart';
 import 'package:timer_progressbar_getx_sycn/controller/controller_video_player.dart';
 import 'package:video_player/video_player.dart';
 
 
 
-class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
+// class GetxSyncPlayer extends GetView<ControllerVideoPlayer> {
+class GetxSyncPlayer extends GetView<ControllerUseVideoProgress> {
   const GetxSyncPlayer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ControllerVideoPlayer());
+    // Get.put(ControllerVideoPlayer());
+    Get.put(ControllerUseVideoProgress());
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -111,7 +115,10 @@ class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({Key? key, required this.GetxController}) : super(key: key);
 
   // final VideoPlayerController playerController;
-  final ControllerVideoPlayer GetxController;
+  // final ControllerVideoPlayer GetxController;
+  final ControllerUseVideoProgress GetxController;
+
+
 
   @override
   Widget build(BuildContext context) {
