@@ -14,23 +14,27 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
   /// Animation code ------------------------------------------------------------------------------------------------
   late AnimationController animationController; // 프로그래스바 애니메이션 컨트롤
 
-
-  RxString get countText {
-    // ( playerController.value.position.inSeconds/playerController.value.duration.inSeconds )
-    // 현재 : playerController.value.position.inSeconds
-    // 총 : playerController.value.duration.inSeconds
-    /// 여기서 count의 의미는 무었인가?
-    /// count는 계속 변한다.
-    // Duration count = animationController.duration! * animationController.value;
-    // Duration duration = Duration(seconds: 3);
-    /// 영상이 재생중인지 true or false
-    return playerController.value.isPlaying
-        ? '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs
-        : '${(playerController.value.duration.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.duration.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
-
-    return '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
-
-  }
+  /// RxString countText
+  /// 값이 변화 될때만 아래 코드가 동작한다.
+  // RxString get countText {
+  //   // ( playerController.value.position.inSeconds/playerController.value.duration.inSeconds )
+  //   // 현재 : playerController.value.position.inSeconds
+  //   // 총 : playerController.value.duration.inSeconds
+  //   /// 여기서 count의 의미는 무었인가?
+  //   /// count는 계속 변한다.
+  //
+  //   Duration count = animationController.duration! * animationController.value;
+  //   print("비디오 플레이 중?? = "+playerController.value.isPlaying.toString());
+  //
+  //   /// 영상이 재생중인지 true or false
+  //   // return playerController.value.isPlaying
+  //   //     ? '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs
+  //   //     : '${(playerController.value.duration.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.duration.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
+  //
+  //   return
+  //   '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
+  // }
+  RxString countText = ''.obs;
 
   RxDouble progress = 0.0.obs;  // progressIndicator 가 진행될때 적용될 값
   RxBool isTimerPlaying = false.obs; // CountDown 이 실행중인지 아닌지
@@ -65,6 +69,15 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
     initializeVideoPlayerFuture = playerController.initialize();
     // 비디오를 반복 재생하기 위해 컨트롤러를 사용합니다.
     // playerController.setLooping(true);
+
+    playerController.addListener(() {
+      // print("현재 재생 inSeconds  = "+playerController.value.position.inSeconds.toString());
+
+      countText.value = '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}';
+      print("현재 재생 inSeconds  = "+ countText.value);
+
+    });
+
 
     /// Animation code ------------------------------------------------------------------------------------------------
     /// 애니메이션 컨트롤러 초기화
