@@ -32,6 +32,7 @@ class GetxSyncPlayer extends GetView<ControllerUseVideoProgress> {
                     children: <Widget>[
                       VideoPlayer(controller.playerController),
                       _ControlsOverlay(GetxController: controller),
+
                       // _ControlsOverlay(controller: controller.playerController),
                       // VideoProgressIndicator(controller.playerController, allowScrubbing: true), // 하단 프로그래스바
                     ],
@@ -72,7 +73,7 @@ class GetxSyncPlayer extends GetView<ControllerUseVideoProgress> {
                               children: [
                                 Container(
                                   child:
-                                  Text("${controller.countText.value}", style: TextStyle(fontSize: 18)),  // 운동 타이머
+                                  Text("${controller.countDownText.value}", style: TextStyle(fontSize: 18)),  // 운동 타이머
                                 ),  // 메인 이미지 운동 제목
                                 Container(
                                   margin: EdgeInsets.only(left: 20),
@@ -114,7 +115,7 @@ class GetxSyncPlayer extends GetView<ControllerUseVideoProgress> {
 class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({Key? key, required this.GetxController}) : super(key: key);
 
-  // final VideoPlayerController playerController;
+
   // final ControllerVideoPlayer GetxController;
   final ControllerUseVideoProgress GetxController;
 

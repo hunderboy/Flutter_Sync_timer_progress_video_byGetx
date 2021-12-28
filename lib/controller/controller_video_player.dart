@@ -15,7 +15,7 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
   late AnimationController animationController; // 프로그래스바 애니메이션 컨트롤
 
   // CountDown Text : 00:02 형태로 카운트 다운
-  RxString get countText {
+  RxString get countDownText {
     Duration count = animationController.duration! * animationController.value;
     return animationController.isDismissed
         ? '${(animationController.duration!.inMinutes % 60).toString().padLeft(2, '0')}:${(animationController.duration!.inSeconds % 60).toString().padLeft(2, '0')}'.obs
@@ -27,7 +27,7 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
 
   // 끝나는 타이밍에 소리내는 알람을 울린다.
   void notify() {
-      print("countText == 00:00");
+      print("countDownText == 00:00");
       FlutterRingtonePlayer.playNotification(); // '띵' 하는 소리 울림
       isTimerPlaying.value = false;  // 플레잉 중지
       progress.value = 0.0;     // 100% 다 채워지게 한다.

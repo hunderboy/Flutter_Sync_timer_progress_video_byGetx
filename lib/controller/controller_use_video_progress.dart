@@ -14,30 +14,10 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
   /// Animation code ------------------------------------------------------------------------------------------------
   late AnimationController animationController; // 프로그래스바 애니메이션 컨트롤
 
-  /// RxString countText
-  /// 값이 변화 될때만 아래 코드가 동작한다.
-  // RxString get countText {
-  //   // ( playerController.value.position.inSeconds/playerController.value.duration.inSeconds )
-  //   // 현재 : playerController.value.position.inSeconds
-  //   // 총 : playerController.value.duration.inSeconds
-  //   /// 여기서 count의 의미는 무었인가?
-  //   /// count는 계속 변한다.
-  //
-  //   Duration count = animationController.duration! * animationController.value;
-  //   print("비디오 플레이 중?? = "+playerController.value.isPlaying.toString());
-  //
-  //   /// 영상이 재생중인지 true or false
-  //   // return playerController.value.isPlaying
-  //   //     ? '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs
-  //   //     : '${(playerController.value.duration.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.duration.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
-  //
-  //   return
-  //   '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}'.obs;
-  // }
-  RxString countText = ''.obs;
 
-  RxDouble progress = 0.0.obs;  // progressIndicator 가 진행될때 적용될 값
-  RxBool isTimerPlaying = false.obs; // CountDown 이 실행중인지 아닌지
+  RxString countDownText = ''.obs;    // 카운트 다운 타이머 텍스트
+  RxDouble progress = 0.0.obs;        // progressIndicator 가 진행될때 적용될 값
+  RxBool isTimerPlaying = false.obs;  // CountDown 이 실행중인지 아닌지
 
   // 끝나는 타이밍에 소리내는 알람을 울린다.
   void notify() {
@@ -52,6 +32,14 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
   bool progressbarSwich = false;
 
 
+  /// 운동 (중:true),(전후:false) 변수
+  // 운동 중 : true (운동 일시정지 상태에도 true 이다.)
+  // 운동 시작 전, 운동 종료 후 : false
+  bool exercieseBegin = false;
+  /// 카운트다운 시 남아 있는 시간 정보
+  late int remainMinutes;
+  late int remainSeconds;
+
 
 
 
@@ -61,22 +49,36 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
   void onInit() {
 
     /// Player code ------------------------------------------------------------------------------------------------
-    // VideoPlayerController를 저장하기 위한 변수를 만듭니다. VideoPlayerController는
-    // asset, 파일, 인터넷 등의 영상들을 제어하기 위해 다양한 생성자를 제공합니다.
-    // controller = VideoPlayerController.network('https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',); // 외부 영상 재생
     playerController = VideoPlayerController.asset('assets/video/sample_abdominal_stretching_cobra.mp4');  // 내부 asset 영상 재생
     // 컨트롤러를 초기화하고 추후 사용하기 위해 Future를 변수에 할당합니다.
     initializeVideoPlayerFuture = playerController.initialize();
-    // 비디오를 반복 재생하기 위해 컨트롤러를 사용합니다.
-    // playerController.setLooping(true);
 
+    // 컨트롤러 리스너 적용 : 재생중에는 계속 리스너 코드 내용이 반복 실행됨.
     playerController.addListener(() {
-      // print("현재 재생 inSeconds  = "+playerController.value.position.inSeconds.toString());
+      if(exercieseBegin){ /// 운동 중
+        // print("재생중 = "+playerController.value.isPlaying.toString());
+        remainMinutes = playerController.value.duration.inMinutes-playerController.value.position.inMinutes;
+        remainSeconds = playerController.value.duration.inSeconds-playerController.value.position.inSeconds;
 
-      countText.value = '${(playerController.value.position.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.position.inSeconds % 60).toString().padLeft(2, '0')}';
-      print("현재 재생 inSeconds  = "+ countText.value);
+        // print("duration 재생중 : "+playerController.value.duration.toString());
 
+        countDownText.value = '${(remainMinutes % 60).toString().padLeft(2, '0')}:${(remainSeconds % 60).toString().padLeft(2, '0')}';
+        progress.value = 1-playerController.value.position.inSeconds.toDouble();
+      }
+      else{ /// 운동 전후
+        // print("운동 시작전");
+        countDownText.value = '${(playerController.value.duration.inMinutes % 60).toString().padLeft(2, '0')}:${(playerController.value.duration.inSeconds % 60).toString().padLeft(2, '0')}';
+
+      }
+
+      /// 운동 끝
+      if(playerController.value.position == playerController.value.duration){
+        // print("재생이 완료.");
+        exercieseBegin = false;
+      }
     });
+
+
 
 
     /// Animation code ------------------------------------------------------------------------------------------------
@@ -84,34 +86,11 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
     animationController = AnimationController(
       vsync: this,
       // duration: Duration(seconds: 20), // 초기 60초 설정
-      duration: playerController.value.duration
+      duration: playerController.value.duration // 값설정을 어떻게 하느냐에 따라.
     );
 
-
-    animationController.addListener(() {
-      if (animationController.isAnimating) {
-        /// 역방향 value = (1.0 -> 0.0)
-        // progress.value = (-(animationController.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
-        progress.value = 1-animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
-        /// 정방향 value = (0.0 -> 1.0)
-        // progress.value = animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
-      }
-      // else{
-      //   // 스위치 on off
-      //   if(progressbarSwich){ // true 이면
-      //     progressbarSwich = false;
-      //     notify();
-      //   } else {
-      //     progressbarSwich = true;
-      //   }
-      // }
-
-      print(animationController.status.toString());
-
-    });
-
-
     super.onInit();
+
   }
 
   @override
@@ -128,6 +107,8 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
       playerController.pause(); // 일시정지
       animationController.stop();
     } else {
+      exercieseBegin = true;
+
       // 만약 영상이 일시 중지 상태였다면, 재생합니다.
       isTimerPlaying.value = true;
       playerController.play();  // 재생
@@ -135,6 +116,10 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
       animationController.reverse(
           from: animationController.value == 0 ? 1.0 : animationController.value);
     }
+  }
+
+  void Setinit() async {
+    initializeVideoPlayerFuture = await playerController.initialize();
   }
 
 }
