@@ -41,7 +41,7 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
 
 
   @override
-  void onInit() {
+  void onInit() async {
 
     /// Player code ------------------------------------------------------------------------------------------------
     playerController = VideoPlayerController.asset('assets/video/sample_abdominal_stretching_cobra.mp4');  // 내부 asset 영상 재생
@@ -68,6 +68,7 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
       if(playerController.value.position == playerController.value.duration){
         // print("재생이 완료.");
         exercieseBegin = false;
+        progress.value = 0.0;
       }
     });
 
@@ -77,6 +78,7 @@ class ControllerUseVideoProgress extends GetxController with GetSingleTickerProv
       /// 1-1. playerController 가 늦어서 playerController 의 duration(영상 총 재생시간)을 설정해도 00:00:00 으로 나온다. 그래서.. (1-2로 이동)
       duration: playerController.value.duration
     );
+
     once(countDownText, (_)=>   // 한번만 호출되고, 다시 안불려짐
       /// 1-3 duration을 설정하면 영상의 재생시간이 제대로 설정된다.
       animationController.duration = playerController.value.duration
