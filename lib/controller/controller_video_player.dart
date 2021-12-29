@@ -52,11 +52,10 @@ class ControllerVideoPlayer extends GetxController with GetSingleTickerProviderS
 
     animationController.addListener(() {
       if (animationController.isAnimating) {
-        /// 역방향 value = (1.0 -> 0.0)
-        // progress.value = (-(animationController.value-1)); /// 프로그래스 바에 연결된 value 변경 실행
-        progress.value = 1-animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
         /// 정방향 value = (0.0 -> 1.0)
-        // progress.value = animationController.value; /// 프로그래스 바에 연결된 value 변경 실행
+        progress.value = 1-animationController.value;
+        /// 역방향 value = (1.0 -> 0.0)
+        // progress.value = animationController.value;실행
       }
       // else{
       //   // 스위치 on off
