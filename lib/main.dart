@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: CountdownPage(), // StatefulWidget 을 이용한 카운트 다운
       // home: GetxCountdownPage(), // Getx 를 이용한 카운트 다운 + progressIndicator Sync 맞춤
+      // home: GetxSyncPlayer(),   // Getx 를 이용한 카운트 다운 + progressIndicator + Video_player Sync 맞춤
       home: GetxSyncPlayer(),   // Getx 를 이용한 카운트 다운 + progressIndicator + Video_player Sync 맞춤
     );
   }
